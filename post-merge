@@ -1,51 +1,45 @@
 #!/bin/bash
 
+filename="FinalFantasyVictory.mp3"
+windows_filename="FinalFantasyVictory.wav" # 'cause the .NET SoundPlayer doesn't support .MP3
+script_dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd ) #courtesy of http://stackoverflow.com/questions/59895/can-a-bash-script-tell-what-directory-its-stored-in
+
 echo $GIT_REFLOG_ACTION
-filepath="./FinalFantasyVictory.mp3"
-windows_filepath="./FinalFantasyVictory.wav" # 'cause the .NET SoundPlayer doesn't support .MP3
 
 if [ "$GIT_REFLOG_ACTION" != pull ]; then
     branch=`git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`
-    if [ "$branch" = master ]; then
-    
+    if [ "$branch" = master ]; then                
         #OSX
-        if [ "$(uname)" == "Darwin" ]; then
-            echo "OSX detected..."
+        if [ "$(uname)" == "Darwin" ]; then            
             # Determine which player is supported and play from it
-            if which afplay &> /dev/null; then
-                echo "Attempting to use afplay..."
-                (afplay "$filepath" &) > /dev/null 2>&1
-            elif which mplayer &> /dev/null; then
-                echo "Attempting to use mplayer..."
-                (mplayer "$filepath" &) > /dev/null 2>&1
+            if which afplay &> /dev/null; then                
+                (afplay "$scipt_dir/$filename" &) > /dev/null 2>&1
+            elif which mplayer &> /dev/null; then                
+                (mplayer "$scipt_dir/$filename" &) > /dev/null 2>&1
             else
-                echo "No player found for $filepath playback =(" 1>&2
+                echo "No player found for $filename playback =(" 1>&2
                 echo "Please verify either \`afplay\` or \`mplayer\` is installed" 1>&2
                 exit 1
             fi
             
         #Linux
-        elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
-            echo "Linux detected..."
+        elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then            
             # Determine which player is supported and play from it
-            if which afplay &> /dev/null; then  
-                echo "Attempting to use afplay..."            
-                (afplay "$filepath" &) > /dev/null 2>&1
-            elif which mplayer &> /dev/null; then
-                echo "Attempting to use mplayer..."
-                (mplayer "$filepath" &) > /dev/null 2>&1
+            if which afplay &> /dev/null; then                          
+                (afplay "$scipt_dir/$filename" &) > /dev/null 2>&1
+            elif which mplayer &> /dev/null; then                
+                (mplayer "$scipt_dir/$filename" &) > /dev/null 2>&1
             else
-                echo "No player found for $filepath playback =(" 1>&2
+                echo "No player found for $filename playback =(" 1>&2
                 echo "Please verify either \`afplay\` or \`mplayer\` is installed" 1>&2
                 exit 1
             fi
             
         #Windows
         elif [[("$(expr substr $(uname -s) 1 10)" == "MINGW32_NT") || ("$(expr substr $(uname -s) 1 10)" == "MINGW64_NT")]]; then
-            # Make PowerShell handle it            
-            exec powershell.exe -ExecutionPolicy RemoteSigned -File '.\.git\hooks\victorious-merge.ps1' $windows_filepath
+            # Make PowerShell handle it                        
+            exec powershell.exe -ExecutionPolicy RemoteSigned -File '.\.git\hooks\victorious-merge.ps1' "$script_dir/$windows_filename"
             
-        fi	        
-        echo "ending..."
+        fi	                
     fi
 fi
