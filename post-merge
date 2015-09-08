@@ -1,10 +1,43 @@
-#!/bin/sh
+#!/bin/bash
 
 echo $GIT_REFLOG_ACTION
+$filepath = ./FinalFantasyVictory.mp3
 
 if [ "$GIT_REFLOG_ACTION" != pull ]; then
     branch=`git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`
     if [ "$branch" = master ]; then
-	(afplay ~/lib/FinalFantasyVictory.mp3 &) > /dev/null 2>&1
+    
+        #OSX
+        if [ "$(uname)" == "Darwin" ]; then
+            # Determine which player is supported and play from it
+            if which afplay &> /dev/null; then            
+              afplay "$filepath" &> /dev/null
+            elif which mplayer &> /dev/null; then
+              mplayer "$filepath" &> /dev/null
+            else
+              echo "No player found for $filepath playback =(" 1>&2
+              echo "Please verify either \`afplay\` or \`mplayer\` is installed" 1>&2
+              exit 1
+            fi
+            
+        #Linux
+        elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+            # Determine which player is supported and play from it
+            if which afplay &> /dev/null; then            
+              afplay "$filepath" &> /dev/null
+            elif which mplayer &> /dev/null; then
+              mplayer "$filepath" &> /dev/null
+            else
+              echo "No player found for $filepath playback =(" 1>&2
+              echo "Please verify either \`afplay\` or \`mplayer\` is installed" 1>&2
+              exit 1
+            fi
+            
+        #Windows
+        elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
+            # Make PowerShell handle it
+            exec powershell.exe -ExecutionPolicy RemoteSigned -File '.\.git\hooks\victorious-merge.ps1 $filepath'
+            
+        fi	
     fi
 fi
