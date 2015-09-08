@@ -10,6 +10,6 @@ and FinalFantasyVictory.mp3/wav into .git/hooks, and finally, revel in the glory
 
 Requires afplay (installed by default on OS X) or mplayer.
 
-Now supports Windows by using PowerShell to invoke the included victorious-merge.ps1! 
+Now supports Windows by using PowerShell to invoke the included `victorious-merge.ps1`! 
 Some inspiration taken from twolfson's [victorious-git](https://github.com/twolfson/victorious-git)
 for handling missing afplay.
