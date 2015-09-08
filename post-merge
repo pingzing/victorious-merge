@@ -1,7 +1,8 @@
 #!/bin/bash
 
 echo $GIT_REFLOG_ACTION
-$filepath = ./FinalFantasyVictory.mp3
+filepath="./FinalFantasyVictory.mp3"
+windows_filepath="./FinalFantasyVictory.wav" # 'cause the .NET SoundPlayer doesn't support .MP3
 
 if [ "$GIT_REFLOG_ACTION" != pull ]; then
     branch=`git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`
@@ -34,10 +35,11 @@ if [ "$GIT_REFLOG_ACTION" != pull ]; then
             fi
             
         #Windows
-        elif [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
-            # Make PowerShell handle it
-            exec powershell.exe -ExecutionPolicy RemoteSigned -File '.\.git\hooks\victorious-merge.ps1 $filepath'
+        elif [[("$(expr substr $(uname -s) 1 10)" == "MINGW32_NT") || ("$(expr substr $(uname -s) 1 10)" == "MINGW64_NT")]]; then
+            # Make PowerShell handle it            
+            exec powershell.exe -ExecutionPolicy RemoteSigned -File '.\.git\hooks\victorious-merge.ps1' $windows_filepath
             
-        fi	
+        fi	        
+        echo "ending..."
     fi
 fi
