@@ -13,9 +13,9 @@ if [ "$GIT_REFLOG_ACTION" != pull ]; then
         if [ "$(uname)" == "Darwin" ]; then            
             # Determine which player is supported and play from it
             if which afplay &> /dev/null; then                
-                (afplay "$scipt_dir/$filename" &) > /dev/null 2>&1
+                (afplay "$script_dir/$filename" &) > /dev/null 2>&1
             elif which mplayer &> /dev/null; then                
-                (mplayer "$scipt_dir/$filename" &) > /dev/null 2>&1
+                (mplayer "$script_dir/$filename" &) > /dev/null 2>&1
             else
                 echo "No player found for $filename playback =(" 1>&2
                 echo "Please verify either \`afplay\` or \`mplayer\` is installed" 1>&2
@@ -26,9 +26,9 @@ if [ "$GIT_REFLOG_ACTION" != pull ]; then
         elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then            
             # Determine which player is supported and play from it
             if which afplay &> /dev/null; then                          
-                (afplay "$scipt_dir/$filename" &) > /dev/null 2>&1
+                (afplay "$script_dir/$filename" &) > /dev/null 2>&1
             elif which mplayer &> /dev/null; then                
-                (mplayer "$scipt_dir/$filename" &) > /dev/null 2>&1
+                (mplayer "$script_dir/$filename" &) > /dev/null 2>&1
             else
                 echo "No player found for $filename playback =(" 1>&2
                 echo "Please verify either \`afplay\` or \`mplayer\` is installed" 1>&2
