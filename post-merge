@@ -10,28 +10,34 @@ if [ "$GIT_REFLOG_ACTION" != pull ]; then
     
         #OSX
         if [ "$(uname)" == "Darwin" ]; then
+            echo "OSX detected..."
             # Determine which player is supported and play from it
-            if which afplay &> /dev/null; then            
-              afplay "$filepath" &> /dev/null
+            if which afplay &> /dev/null; then
+                echo "Attempting to use afplay..."
+                (afplay "$filepath" &) > /dev/null 2>&1
             elif which mplayer &> /dev/null; then
-              mplayer "$filepath" &> /dev/null
+                echo "Attempting to use mplayer..."
+                (mplayer "$filepath" &) > /dev/null 2>&1
             else
-              echo "No player found for $filepath playback =(" 1>&2
-              echo "Please verify either \`afplay\` or \`mplayer\` is installed" 1>&2
-              exit 1
+                echo "No player found for $filepath playback =(" 1>&2
+                echo "Please verify either \`afplay\` or \`mplayer\` is installed" 1>&2
+                exit 1
             fi
             
         #Linux
         elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+            echo "Linux detected..."
             # Determine which player is supported and play from it
-            if which afplay &> /dev/null; then            
-              afplay "$filepath" &> /dev/null
+            if which afplay &> /dev/null; then  
+                echo "Attempting to use afplay..."            
+                (afplay "$filepath" &) > /dev/null 2>&1
             elif which mplayer &> /dev/null; then
-              mplayer "$filepath" &> /dev/null
+                echo "Attempting to use mplayer..."
+                (mplayer "$filepath" &) > /dev/null 2>&1
             else
-              echo "No player found for $filepath playback =(" 1>&2
-              echo "Please verify either \`afplay\` or \`mplayer\` is installed" 1>&2
-              exit 1
+                echo "No player found for $filepath playback =(" 1>&2
+                echo "Please verify either \`afplay\` or \`mplayer\` is installed" 1>&2
+                exit 1
             fi
             
         #Windows
